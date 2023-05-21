@@ -3463,7 +3463,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
 }
 
 .authentication-bg {
-  background-image: url("https://m2w4k5m5.stackpathcdn.com/wp-content/uploads/AdobeStock_142175227.jpeg");
+  background-image: url("../images/bg.jpg");
   height: 100vh;
   background-size: cover;
   background-position: center;

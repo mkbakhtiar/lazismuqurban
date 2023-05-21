@@ -1,0 +1,32 @@
+.loadingSpinner {
+  border: 3px solid #fff;
+  border-top-color: rgba(0, 0, 0, 0);
+  border-left-color: rgba(0, 0, 0, 0);
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+  border-radius: 50%;
+  animation: loadingSpinner 0.7s infinite linear;
+  -webkit-animation: loadingSpinner 0.7s infinite linear;
+}
+
+button .loadingSpinner {
+
+}
+
+@keyframes loadingSpinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loadingSpinner {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}

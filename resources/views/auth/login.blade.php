@@ -1,6 +1,24 @@
 @extends('templates.auth')
 
 @section('content')
+
+@push('css-style')
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+        -moz-appearance: textfield;
+        }
+    </style>
+@endpush
+
+
 <div class="authentication-page-content p-4 d-flex align-items-center min-vh-100">
     <div class="w-100">
         <div class="row justify-content-center">
@@ -22,13 +40,13 @@
                         <form class="" action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-3 auth-form-group-custom mb-4">
-                                <i class="ri-user-2-line auti-custom-input-icon"></i>
-                                <label for="username">Username</label>
-                                <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="username" required placeholder="Masukan username">
+                                <i class="dripicons-phone auti-custom-input-icon"></i>
+                                <label for="handphone">No WA</label>
+                                <input type="number" pattern="[0-9]*" inputmode="numeric" class="form-control{{ $errors->has('handphone') ? ' is-invalid' : '' }}" name="handphone" id="handphone" required placeholder="Masukan nomor WA">
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('handphone'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('handphone') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -45,26 +63,12 @@
                                 @endif
                             </div>
 
-                            <div class="mb-3 auth-form-group-custom mb-4">
-                                <i class="ri-calendar-event-line auti-custom-input-icon"></i>
-                                <label for="useryears">Tahun Anggaran</label>
-                                <div class="">
-                                    <select name="tahun_anggaran" class="form-control" id="useryears" required>
-                                        <option value="">Pilih</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                    </select>
-                                </div>
-                            </div>
-
                             <div class="mt-4 text-center">
                                 <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Log In</button>
                             </div>
 
                             <div class="mt-4 text-center">
-                                <a href="auth-recoverpw.html" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                                Belum punya akun? <a href="/register" class="text-muted"> Daftar Disini </a>
                             </div>
                         </form>
                     </div>

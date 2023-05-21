@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::post('/register-validate', [App\Http\Controllers\UsersController::class, 'registerValidate']);
+Route::get('/validate-wa-number/{wa}', [App\Http\Controllers\UsersController::class, 'numberWAValidate']);
+Route::get('/send-otp/{wa}', [App\Http\Controllers\UsersController::class, 'sendOTP']);
 
 Auth::routes();
 
