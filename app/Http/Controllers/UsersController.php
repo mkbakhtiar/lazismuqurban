@@ -37,7 +37,7 @@ class UsersController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 201)
             : new JsonResponse([
-                'data' => 'Data Anda falid, silahkan isi kode OTP yang sudah dikirimkan ke nomor WA '. $request->handphone,
+                'data' => 'Data Anda valid, silahkan isi kode OTP yang sudah dikirimkan ke nomor WA '. $request->handphone,
                 'success' => true
             ], 200);
     }

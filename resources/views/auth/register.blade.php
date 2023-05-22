@@ -110,20 +110,24 @@
                 </form>
             </div>
             <div class="panelOTP" style="display:none">
-                <form action="sendOTPForm">
-                    @csrf
-                    <div class="mb-4 d-flex digit-group">
-                        <input type="number" id="digit-1" name="digit-1" required data-next="digit-2" />
-                        <span class="splitter">&ndash;</span>
-                        <input type="number" id="digit-2" name="digit-2" required data-next="digit-3" data-previous="digit-1" />
-                        <span class="splitter">&ndash;</span>
-                        <input type="number" id="digit-3" name="digit-3" required data-next="digit-4" data-previous="digit-2" />
-                        <span class="splitter">&ndash;</span>
-                        <input type="number" id="digit-4" name="digit-4" required data-previous="digit-3" />
-                    </div>
-                    <div class="">
-                        <p>Tidak menerima Kode OTP di WA?<br><b>Minta kode baru dalam <span id="Timer">00:30</span></b></p>
-                    </div>
+									<form method="POST" class="digit-group" id="OTPForm" data-group-name="digits" autocomplete="off">
+										@csrf
+										<div class="mb-4 d-flex">
+											<input type="number" id="digit-1" name="digit-1" required data-next="digit-2" />
+											<span class="splitter">&ndash;</span>
+											<input type="number" id="digit-2" name="digit-2" required data-next="digit-3" data-previous="digit-1" />
+											<span class="splitter">&ndash;</span>
+											<input type="number" id="digit-3" name="digit-3" required data-next="digit-4" data-previous="digit-2" />
+											<span class="splitter">&ndash;</span>
+											<input type="number" id="digit-4" name="digit-4" required data-previous="digit-3" />
+										</div>
+
+                                        <div class="requestCode">
+                                            <p>Tidak menerima Kode OTP di WA?<br><b>Minta kode baru dalam <span id="Timer">00:30</span></b></p>
+                                        </div>
+										<div class="sendCode mb-3" style="display:none">
+											<a href="javascript:void(0)" onclick="reSendCode()"><b>Minta kode baru</b></a>
+										</div>
                     <button class="btn btn-primary w-md waves-effect waves-light btnSubmit" type="submit"> <div class="place-loader"></div> Verifikasi Kode </button>
                 </form>
             </div>
@@ -197,7 +201,8 @@
                                                 function countdown() {
                                                     if (timeLeft == 0) {
                                                         clearTimeout(timerId);
-                                                        doSomething();
+																												$(".sendCode").css("display","block");
+																												$(".requestCode").css("display","none");
                                                     } else {
                                                         elem.innerHTML = "00:"+timeLeft;
                                                         timeLeft--;
@@ -238,6 +243,122 @@
                     }
                 });
 
+            });
+
+            function reSendCode(){
+                $(".sendCode").css("display","none");
+                $(".requestCode").css("display","block");
+                const handphone = $('#handphone').val();
+                $.ajax({
+                    type: "GET",
+                    url: '/send-otp/'+handphone,
+                    beforeSend : function(xhr, opts){
+                            $(".place-loader").addClass("loadingSpinner");
+                            $(".btnSubmit").addClass("d-flex justify-content-center gap-3");
+                    },
+                    success: function( response ) {
+                            const jsonResponse = JSON.parse(response);
+                            if(jsonResponse.status === '200') {
+                                    $("#err-system").html("");
+
+                                    var timeLeft = 60;
+                                    var elem = document.getElementById("Timer");
+
+                                    var timerId = setInterval(countdown, 1000);
+
+                                    function countdown() {
+                                            if (timeLeft == 0) {
+                                                    clearTimeout(timerId);
+                                                    $(".sendCode").css("display","block");
+                                                    $(".requestCode").css("display","none");
+                                            } else {
+                                                    elem.innerHTML = "00:"+timeLeft;
+                                                    timeLeft--;
+                                            }
+                                    }
+                            } else {
+                                    $("#err-system").html("");
+                                    toastr.error( response.message );
+                            }
+                    },
+                    error: function( err ) {
+                            console.log(err);
+                            $("#err-system").html("");
+                    },
+                    complete : function() {
+                            $("#err-system").html("");
+                    },
+                });
+            }
+
+            $(".digit-group")
+            .find("input")
+            .each(function () {
+                    console.log("digit");
+                    $(this).attr("maxlength", 1);
+                    $(this).on("keyup", function (e) {
+                            var parent = $($(this).parent());
+
+                            if (e.keyCode === 8 || e.keyCode === 37) {
+                                    var prev = parent.find("input#" + $(this).data("previous"));
+
+                                    if (prev.length) {
+                                            $(prev).select();
+                                    }
+                            } else if (
+                                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                                    (e.keyCode >= 65 && e.keyCode <= 90) ||
+                                    (e.keyCode >= 96 && e.keyCode <= 105) ||
+                                    e.keyCode === 39
+                            ) {
+                                    var next = parent.find("input#" + $(this).data("next"));
+
+                                    if (next.length) {
+                                            $(next).select();
+                                    } else {
+                                            var kode =
+                                                    $("#digit-1").val() +
+                                                    $("#digit-2").val() +
+                                                    $("#digit-3").val() +
+                                                    $("#digit-4").val();
+                                            // $("#submitkode").removeAttr("disabled");
+                                    }
+                            }
+                    });
+            });
+
+            $("#OTPForm").on("submit", function (e) {
+                e.preventDefault();
+                const kode = $("#digit-1").val() + $("#digit-2").val() + $("#digit-3").val() + $("#digit-4").val();
+
+                var name = $('#name').val();
+                var handphone = $('#handphone').val();
+                var password = $('#userpassword').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '/register',
+                    data: {"_token": "{{ csrf_token() }}", name:name, handphone:handphone, password:password, password_confirmation: confirm, email: '', otp:kode},
+                    beforeSend : function(xhr, opts){
+                            $("#err-system").html("Validate WA Number is Progress");
+                            $(".place-loader").addClass("loadingSpinner");
+                            $(".btnSubmit").addClass("d-flex justify-content-center gap-3");
+                    },
+                    success: function( response ) {
+
+                        if(response.success) {
+                            window.location.href='/home';
+                        }
+                    },
+                    error: function(err) {
+                        toastr.error(err.responseJSON.data);
+                        $(".place-loader").removeClass("loadingSpinner");
+                        $(".btnSubmit").removeClass("d-flex justify-content-center gap-3");
+                        if(err?.responseJSON?.err_type === 'otp_expired') {
+                            window.location.href='/register';
+                        }
+                    }
+                });
             });
         </script>
     @endpush

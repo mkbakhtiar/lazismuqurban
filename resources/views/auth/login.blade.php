@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="p-2 mt-5">
-                        <form class="" action="{{ route('login') }}" method="POST">
+                        <form id="loginForm" class="tooltip-end-bottom">
                             @csrf
                             <div class="mb-3 auth-form-group-custom mb-4">
                                 <i class="dripicons-phone auti-custom-input-icon"></i>
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="mt-4 text-center">
-                                <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Log In</button>
+                                <button class="btn btn-primary w-md waves-effect waves-light btnSubmit" type="submit"><div class="place-loader"></div>Log In</button>
                             </div>
 
                             <div class="mt-4 text-center">
@@ -81,4 +81,36 @@
         </div>
     </div>
 </div>
+    @push('custom-scripts')
+        <script>
+             $("#loginForm").on("submit", function (e) {
+                e.preventDefault();
+
+                var handphone = $('#handphone').val();
+                var password = $('#userpassword').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '/login',
+                    data: {"_token": "{{ csrf_token() }}", handphone:handphone, password:password},
+                    beforeSend : function(xhr, opts){
+                        $(".place-loader").addClass("loadingSpinner");
+                        $(".btnSubmit").addClass("d-flex justify-content-center gap-3");
+                    },
+                    success: function( response ) {
+                        if(response.success) {
+                            window.location.href='/home';
+                        }
+                    },
+                    error: function(err) {
+                        toastr.error(err.responseJSON.data);
+                        $(".place-loader").removeClass("loadingSpinner");
+                        $(".btnSubmit").removeClass("d-flex justify-content-center gap-3");
+                    }
+                });
+
+
+             })
+        </script>
+    @endpush
 @endsection
