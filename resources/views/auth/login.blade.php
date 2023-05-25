@@ -63,8 +63,8 @@
                                 @endif
                             </div>
 
-                            <div class="mt-4 text-center">
-                                <button class="btn btn-primary w-md waves-effect waves-light btnSubmit" type="submit"><div class="place-loader"></div>Log In</button>
+                            <div class="mt-4">
+                                <button style="width:100%" class="btn btn-primary w-md waves-effect waves-light btnSubmit" style="width:100%;" type="submit"><div class="place-loader"></div>Log In</button>
                             </div>
 
                             <div class="mt-4 text-center">
@@ -103,7 +103,7 @@
                         }
                     },
                     error: function(err) {
-                        toastr.error(err.responseJSON.data);
+                        toastr.error(err.responseJSON.message);
                         $(".place-loader").removeClass("loadingSpinner");
                         $(".btnSubmit").removeClass("d-flex justify-content-center gap-3");
                     }

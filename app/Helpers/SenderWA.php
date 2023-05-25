@@ -32,7 +32,7 @@ class SenderWA {
         $dataSending["api_key"] = env('API_KEY_WATZAP');
         $dataSending["number_key"] = env('NUMBER_KEY_WATZAP');
         $dataSending["phone_no"] = $phone_no;
-        $dataSending["message"] = "*".$code."* adalah OTP-mu untuk masuk ke akun Lazismu Kota Malang. Valid selama 2 menit. JANGAN KASIH TAU SIAPAPUN.";
+        $dataSending["message"] = "*".$code."* adalah kode OTP untuk masuk ke akun Lazismu. Kode ini akan valid selama 2 menit. KODE INI BERSIFAT RAHASIA. JANGAN DIBERITAHU SIAPAPUN.";
         $curl = curl_init();
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://api.watzap.id/v1/send_message',

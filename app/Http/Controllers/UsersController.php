@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
+use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
 use App\Helpers\SenderWA;
 
@@ -58,4 +61,108 @@ class UsersController extends Controller
         return $sender_wa;
 
     }
+
+public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $getProduct = DB::table('users')->get();
+            return DataTables::of($getProduct)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $actionBtn = '<a href="/petugas/ubah/'.$row->id.'" class="edit btn btn-success btn-sm">Ubah</a> <a href="javascript:void(0)" class="edit btn btn-default btn-sm" data-bs-toggle="modal" data-bs-target=".bs-modal-sm-delete" onclick="senderDataModal('.$row->id.',\''.$row->name.'\',\'Petugas\',\'/petugas/hapus\')">Hapus</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('staf.index');
+    }
+
+    public function tambah(){
+        return view('staf.tambah');
+    }
+
+    public function post(Request $request) {
+        $this->validate($request, [
+            'name' => 'required',
+            'handphone' => 'required|unique:users',
+            'password' => 'required',
+        ]);
+
+        $insert = DB::table('users')->insertGetId([
+            'name' => $request->name,
+            'handphone' => $request->handphone,
+            'password' => Hash::make($request->password),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if($insert) {
+            return new JsonResponse([
+                'data' => [],
+                'success' => true
+            ], 200);
+        } else {
+            return new JsonResponse([
+                'message' => 'Gagal menambah petugas',
+                'success' => false
+            ], 400);
+        }
+    }
+
+    public function ubah($id){
+        $getData = DB::table('users')->where('id', $id)->first();
+        $data = [
+            'data' => $getData
+        ];
+
+        return view('staf.ubah')->with($data);
+    }
+
+    public function put(Request $request) {
+        $this->validate($request, [
+            'name' => 'required',
+            'handphone' => ['required', \Illuminate\Validation\Rule::unique('users')->ignore($request->id)],
+        ]);
+
+        $updateArray = [
+            'name' => $request->name,
+            'handphone' => $request->handphone,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        if($request->password) {
+           $updateArray += ['password' => Hash::make($request->password)];
+        }
+
+        $insert = DB::table('users')->where('id', $request->id)->update($updateArray);
+
+        if($insert) {
+            return new JsonResponse([
+                'data' => [],
+                'success' => true
+            ], 200);
+        } else {
+            return new JsonResponse([
+                'message' => 'Gagal mengubah petugas',
+                'success' => false
+            ], 400);
+        }
+    }
+
+    public function hapus(Request $request) {
+        $id = $request->id;
+        $delete = DB::table('users')->where('id', $id)->delete();
+
+        if($delete) {
+            toastr()->success('Data petugas berhasil dihapus!');
+            return redirect('/petugas');
+        } else {
+            toastr()->error('Data petugas gagal dihapus!');
+            return redirect('/petugas');
+        }
+    }
+
 }
+
+

@@ -15,6 +15,16 @@ class Transaction extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('packages_id');
+            $table->integer('staf_id');
+            $table->string('customer_name');
+            $table->string('customer_nik');
+            $table->string('customer_address');
+            $table->string('customer_phone');
+            $table->integer('nominal');
+            $table->integer('qty');
+            $table->string('satuan');
+            $table->string('description');
             $table->timestamps();
         });
     }

@@ -4,17 +4,6 @@
 
 @push('css-style')
     <style>
-        /* Chrome, Safari, Edge, Opera */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-        }
-
-        /* Firefox */
-        input[type=number] {
-        -moz-appearance: textfield;
-        }
         .digit-group input {
             width: 50px;
             height: 50px;
@@ -355,7 +344,11 @@
                         $(".place-loader").removeClass("loadingSpinner");
                         $(".btnSubmit").removeClass("d-flex justify-content-center gap-3");
                         if(err?.responseJSON?.err_type === 'otp_expired') {
-                            window.location.href='/register';
+                            setTimeout(()=> {
+                                window.location.href='/register';
+                            }
+                            ,2000);
+
                         }
                     }
                 });
