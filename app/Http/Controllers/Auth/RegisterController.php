@@ -51,10 +51,12 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required'],
+            'pdm_id' => ['required'],
             'handphone' => ['required', 'unique:users'],
             'password' => ['required', 'min:8', 'confirmed'],
         ], [
             'name.required' => 'Silahkan mengisi nama lengkap.',
+            'pdm_id.required' => 'Silahkan mengisi wilayah.',
             'handphone.required' => 'Silahkan mengisi nomor WA.',
             'handphone.unique' => 'Nomor handphone sudah terdaftar.',
             'password.required' => 'Silahkan mengisi password.',
@@ -75,6 +77,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'handphone' => $data['handphone'],
+            'pdm_id' => $data['pdm_id'],
             'password' => Hash::make($data['password']),
         ]);
     }

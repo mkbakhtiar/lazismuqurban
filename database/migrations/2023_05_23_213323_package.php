@@ -15,6 +15,7 @@ class Package extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('staf_id');
             $table->string('name');
             $table->string('thumbnail');
             $table->integer('price');
@@ -32,6 +33,6 @@ class Package extends Migration
      */
     public function down()
     {
-        //
+         Schema::dropIfExists('package');
     }
 }

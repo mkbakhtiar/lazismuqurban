@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
@@ -65,6 +63,7 @@ class PackagesController extends Controller
 
         $insert = DB::table('packages')->insertGetId([
             'thumbnail' => $rename_file,
+            'staf_id' => auth()->user()->id,
             'name' => $request->name,
             'price' => (int)str_replace(".","", $request->price),
             'unit' => $request->unit,

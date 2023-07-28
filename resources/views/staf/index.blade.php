@@ -52,7 +52,8 @@
 
 @push('custom-scripts')
     <script>
-        var table = $('.staf-datatables').DataTable({
+        var table = $('.staf-datatables')
+        .DataTable({
             processing: true,
             serverSide: true,
             ajax: "/petugas",
@@ -67,15 +68,6 @@
                     searchable: true
                 },
             ],
-        });
-        $('.staf-datatables').on('click','#deleteModal',function(){
-            var id = $(this).attr('data-id');
-            var table = $(this).attr('data-table');
-            var nama = $(this).attr('data-nama');
-
-            $(".nameDataModal").html(nama);
-            $("#idTxtModalDelete").val(id);
-            $("#tableTxtModalDelete").val(table);
         });
     </script>
 @endpush

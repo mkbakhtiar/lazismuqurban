@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'email',
         'handphone',
+        'pdm_id',
     ];
 
     /**

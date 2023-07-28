@@ -70,7 +70,7 @@
                 {
                     data: 'name',
                     render: function (data, type, row) {
-                        return "<b>"+data+"</b><br><p style='font-size:12px;'>"+row.description+"</p>";
+                        return "<b>"+data+"</b><br><p style='font-size:12px;text-align:justify;word-break: break-word;white-space: pre-line;overflow-wrap: break-word;-ms-word-break: break-word;word-break: break-word;-ms-hyphens: auto;-moz-hyphens: auto;-webkit-hyphens: auto;hyphens: auto; '>"+row.description+"</p>";
                     },
                 },
                 {
@@ -89,15 +89,6 @@
                     searchable: true
                 },
             ],
-        });
-        $('.packages-datatables').on('click','#deleteModal',function(){
-            var id = $(this).attr('data-id');
-            var table = $(this).attr('data-table');
-            var nama = $(this).attr('data-nama');
-
-            $(".nameDataModal").html(nama);
-            $("#idTxtModalDelete").val(id);
-            $("#tableTxtModalDelete").val(table);
         });
     </script>
 @endpush

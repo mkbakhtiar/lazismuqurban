@@ -52,6 +52,17 @@
                                             <input type="password" class="form-control" id="password" name="password" placeholder="" value="" required>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Wilayah</label>
+                                            <select name="pdm_id" id="pdm_id" class="form-control {{ $errors->has('pdm_id') ? ' is-invalid' : '' }}">
+                                                <option value="">Pilih Wilayah</option>
+                                                @foreach ($wilayah as $item)
+                                                    <option value="{{$item->id}}">{{$item->region}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -75,11 +86,12 @@
             var name = $('#name').val();
             var handphone = $('#handphone').val();
             var password = $('#password').val();
+            var pdm_id = $('#pdm_id').val();
 
             $.ajax({
                 type: "POST",
                 url: '/petugas/post',
-                data: {"_token": "{{ csrf_token() }}", name:name, handphone:handphone, password:password},
+                data: {"_token": "{{ csrf_token() }}", pdm_id:pdm_id, name:name, handphone:handphone, password:password},
                 beforeSend : function(xhr, opts){
                     $(".place-loader").addClass("loadingSpinner");
                     $(".btnSubmit").addClass("d-flex justify-content-center gap-3");

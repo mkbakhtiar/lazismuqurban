@@ -6,8 +6,9 @@
         <meta charset="utf-8" />
         <title>Lazismu Qurban Dashboard System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesdesign" name="author" />
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+        <meta content="Lazismu Kota Malang" name="description" />
+        <meta content="Lazismu Kota Malang" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
@@ -15,15 +16,14 @@
         <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min') }}.css" rel="stylesheet" type="text/css" />
-
-        <!-- Responsive datatable examples -->
         <link href="{{ asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.min.css" rel="stylesheet" />
-        <!-- Bootstrap Css -->
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
+        <link href="{{ asset('assets/css/jquery.dataTables.dateTime.min.css') }}" rel="stylesheet" >
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
         <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-        <!-- App Css-->
         <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
         <link href="{{ asset('assets/css/customs.css') }}" id="app-style" rel="stylesheet" type="text/css" />
@@ -109,7 +109,7 @@
                             <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Profil</a>
                             <a class="dropdown-item" href="#"><i class="ri-wallet-2-line align-middle me-1"></i>Transaksi Saya</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
+                            <a class="dropdown-item text-danger" href="/logout"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
                         </div>
                     </div>
 
@@ -156,17 +156,7 @@
                                     <i class="ri-apps-2-line me-2"></i>Transaksi <div class="arrow-down"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-transaction">
-                                    <a href="/" class="dropdown-item">Calendar</a>
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-report" role="button"
-                                >
-                                    <i class="dripicons-print me-2"></i>Laporan <div class="arrow-down"></div>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="topnav-report">
-                                    <a href="/" class="dropdown-item">Calendar</a>
+                                    <a href="/qurban" class="dropdown-item">Qurban</a>
                                 </div>
                             </li>
                         </ul>
@@ -185,7 +175,7 @@
             </div>
 
             <div class="modal fade bs-modal-sm-delete" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
+                <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <form action="" id="modalDeleteForm" method="post">
                             @csrf
@@ -200,7 +190,7 @@
                             <div class="modal-footer">
                                 <div class="d-flex">
                                     <input type="submit" value="Ya, Yakin" class="btn btn-danger" style="margin-right:20px">
-                                    <a href="javascript:void(0)" rel="noopener noreferrer" class="btn btn-light">Tidak</a>
+                                    <a href="javascript:void(0)" rel="noopener noreferrer" data-bs-dismiss="modal" class="btn btn-light">Tidak</a>
                                 </div>
                             </div>
                         </form>
@@ -241,10 +231,12 @@
     <script src="{{ asset('assets/libs/metismenu/metisMenu.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.dataTables.dateTime.min.js') }}"></script>
     <!-- Buttons examples -->
     <script src="{{ asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>
@@ -257,6 +249,12 @@
 
     <script src="{{ asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables.net-select/js/dataTables.select.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 
     <!-- Responsive examples -->
     <script src="{{ asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>

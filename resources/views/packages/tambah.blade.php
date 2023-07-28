@@ -43,7 +43,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Harga</label>
-                                            <input type="text" class="form-control" name="price" placeholder="" value="" required>
+                                            <input type="text" class="form-control" data-type='currency' name="price" placeholder="" value="" required>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

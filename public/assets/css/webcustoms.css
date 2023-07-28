@@ -1,0 +1,116 @@
+body {
+    font-family: "Poppins", Sans-serif;
+    background: #ffffff;
+}
+body[data-layout="horizontal"] .page-content {
+    margin-top: 0;
+}
+.elementor-nav-menu {
+    position: relative;
+    z-index: 2;
+}
+.elementor-nav-menu--layout-horizontal {
+    display: flex;
+}
+.elementor-nav-menu__align-left .elementor-nav-menu {
+    margin-right: auto;
+    justify-content: flex-start;
+}
+.elementor-nav-menu--layout-horizontal .elementor-nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.elementor-nav-menu--layout-horizontal .elementor-nav-menu > li {
+    display: flex;
+}
+
+.elementor-nav-menu li {
+    border-width: 0;
+}
+.elementor-nav-menu,
+.elementor-nav-menu li,
+.elementor-nav-menu ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.elementor-nav-menu .menu-item a:hover {
+    color: #f68f28;
+}
+
+.elementor-nav-menu .menu-item a {
+    color: #54595f;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.navbar-header {
+    height: 100px;
+}
+.carousel-inner {
+    height: 550px;
+}
+.paket-list h2 {
+    color: #f68f28;
+}
+.product-box {
+    padding: 0;
+}
+.product-img img {
+    border-radius: 20px;
+}
+.product-img .product-ribbon {
+    top: 20px;
+    left: 0;
+    font-size: 20px;
+}
+
+/* change transition duration to control the speed of fade effect */
+.carousel-item {
+    transition: transform 1.2s ease-in-out;
+}
+
+.carousel-fade .active.carousel-item-start,
+.carousel-fade .active.carousel-item-end {
+    transition: opacity 0s 1.2s;
+}
+.nav-link {
+    color: #54595f !important;
+    padding: 15px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    font-family: "Poppins", Sans-serif !important;
+}
+.topnav {
+    -webkit-box-shadow: !important;
+    box-shadow: none !important;
+}
+.carousel-item {
+    height: 100%;
+}
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+#page-topbar {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.page-title-box {
+    .title {
+        color: white !important;
+        letter-spacing: 3px;
+        font-size: 20px;
+    }
+}
+.page-title-right ol li {
+    color: white !important;
+    font-size: 20px;
+}

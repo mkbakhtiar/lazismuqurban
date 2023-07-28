@@ -1,4 +1,13 @@
 // Jquery Dependency
+var minDate, maxDate;
+
+// Create date inputs
+minDate = new DateTime($("#start"), {
+    format: "YYYY-MM-DD",
+});
+maxDate = new DateTime($("#end"), {
+    format: "YYYY-MM-DD",
+});
 
 $("input[data-type='currency']").on({
     keyup: function () {
@@ -48,6 +57,16 @@ function senderDataModal(id, desc, module, action) {
     $("#modalDeleteForm").attr("action", action);
     $("#idModalDelete").val(id);
     $("#smModalDeleteTitle").html(
-        "Apakah Yakin Akan Menghapus Data " + module + " " + desc + "?"
+        action.includes("hapus")
+            ? "Apakah Yakin Akan Menghapus Data " + module + " " + desc + "?"
+            : desc + "?"
     );
 }
+$(".datetimepicker").each(function () {
+    $(this).datetimepicker({
+        format: "Y-m-d H:i:s",
+        stepping: 1,
+        forceMinuteStep: true,
+        defaultDate: false,
+    });
+});

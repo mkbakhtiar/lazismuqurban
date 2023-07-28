@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="mb-4">
-                <p id="welcomeMsg">Daftar sebagai petugas Qurban Lazismu. <br> Jika sudah mempunyai akun klik
+                <p id="welcomeMsg">Form pendaftaran Amil <br>Jika sudah mempunyai akun klik
                     <a href="/login">login</a>
                     .
                 </p>
@@ -66,6 +66,22 @@
                         @if ($errors->has('handphone'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('handphone') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <div class="mb-3 auth-form-group-custom">
+                        <i class="dripicons-flag auti-custom-input-icon"></i>
+                        <label for="handphone">Wilayah</label>
+                        <select name="pdm_id" id="pdm_id" class="form-control {{ $errors->has('pdm_id') ? ' is-invalid' : '' }}">
+                            <option value="">Pilih Wilayah</option>
+                            @foreach ($wilayah as $item)
+                                <option value="{{$item->id}}">{{$item->region}}</option>
+                            @endforeach
+                        </select>
+
+                        @if ($errors->has('pdm_id'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('pdm_id') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -99,24 +115,24 @@
                 </form>
             </div>
             <div class="panelOTP" style="display:none">
-									<form method="POST" class="digit-group" id="OTPForm" data-group-name="digits" autocomplete="off">
-										@csrf
-										<div class="mb-4 d-flex">
-											<input type="number" id="digit-1" name="digit-1" required data-next="digit-2" />
-											<span class="splitter">&ndash;</span>
-											<input type="number" id="digit-2" name="digit-2" required data-next="digit-3" data-previous="digit-1" />
-											<span class="splitter">&ndash;</span>
-											<input type="number" id="digit-3" name="digit-3" required data-next="digit-4" data-previous="digit-2" />
-											<span class="splitter">&ndash;</span>
-											<input type="number" id="digit-4" name="digit-4" required data-previous="digit-3" />
-										</div>
+                <form method="POST" class="digit-group" id="OTPForm" data-group-name="digits" autocomplete="off">
+                    @csrf
+                    <div class="mb-4 d-flex">
+                        <input type="number" id="digit-1" name="digit-1" required data-next="digit-2" />
+                        <span class="splitter">&ndash;</span>
+                        <input type="number" id="digit-2" name="digit-2" required data-next="digit-3" data-previous="digit-1" />
+                        <span class="splitter">&ndash;</span>
+                        <input type="number" id="digit-3" name="digit-3" required data-next="digit-4" data-previous="digit-2" />
+                        <span class="splitter">&ndash;</span>
+                        <input type="number" id="digit-4" name="digit-4" required data-previous="digit-3" />
+                    </div>
 
-                                        <div class="requestCode">
-                                            <p>Tidak menerima Kode OTP di WA?<br><b>Minta kode baru dalam <span id="Timer">00:30</span></b></p>
-                                        </div>
-										<div class="sendCode mb-3" style="display:none">
-											<a href="javascript:void(0)" onclick="reSendCode()"><b>Minta kode baru</b></a>
-										</div>
+                    <div class="requestCode">
+                        <p>Tidak menerima Kode OTP di WA?<br><b>Minta kode baru dalam <span id="Timer">00:30</span></b></p>
+                    </div>
+                    <div class="sendCode mb-3" style="display:none">
+                        <a href="javascript:void(0)" onclick="reSendCode()"><b>Minta kode baru</b></a>
+                    </div>
                     <button class="btn btn-primary w-md waves-effect waves-light btnSubmit" type="submit"> <div class="place-loader"></div> Verifikasi Kode </button>
                 </form>
             </div>
@@ -133,6 +149,7 @@
                 var handphone = $('#handphone').val();
                 var password = $('#userpassword').val();
                 var confirm = $('#password_confirmation').val();
+                var pdm_id = $('#pdm_id').val();
 
                 //validate number WA
 
@@ -140,7 +157,7 @@
                     type: "GET",
                     url: '/validate-wa-number/'+handphone,
                     beforeSend : function(xhr, opts){
-                        $("#err-system").html("Validate WA Number is Progress");
+                        // $("#err-system").html("Validate WA Number is Progress");
                         $(".place-loader").addClass("loadingSpinner");
                         $(".btnSubmit").addClass("d-flex justify-content-center gap-3");
                     },
@@ -157,14 +174,14 @@
                             $.ajax({
                                 type: "POST",
                                 url: '/register-validate',
-                                data: {"_token": "{{ csrf_token() }}", name:name, handphone:handphone, password:password, password_confirmation: confirm, email: ''},
+                                data: {"_token": "{{ csrf_token() }}", pdm_id:pdm_id,name:name, handphone:handphone, password:password, password_confirmation: confirm, email: ''},
                                 beforeSend : function(xhr, opts){
-                                    $("#err-system").html("Validate WA Number is Done &#10004;");
+                                    // $("#err-system").html("Validate WA Number is Done &#10004;");
                                     $(".place-loader").addClass("loadingSpinner");
                                     $(".btnSubmit").addClass("d-flex justify-content-center gap-3");
                                 },
                                 success: function( response ) {
-                                    $("#err-system").html("Validation Data is Done &#10004; <br> OTP is Sending...");
+                                    // $("#err-system").html("Validation Data is Done &#10004; <br> OTP is Sending...");
                                     // send WA API
 
                                     $.ajax({
@@ -177,7 +194,7 @@
                                         success: function( response ) {
                                             const jsonResponse = JSON.parse(response);
                                             if(jsonResponse.status === '200') {
-                                                $("#err-system").html("");
+                                                // $("#err-system").html("");
                                                 $("#welcomeMsg").html('Silahkan isi kode OTP yang sudah dikirimkan <br> ke nomor WA '+ handphone);
                                                 $(".panelOTP").css("display","block");
                                                 $(".panelRegister").css("display","none");
@@ -190,31 +207,31 @@
                                                 function countdown() {
                                                     if (timeLeft == 0) {
                                                         clearTimeout(timerId);
-																												$(".sendCode").css("display","block");
-																												$(".requestCode").css("display","none");
+                                                        $(".sendCode").css("display","block");
+                                                        $(".requestCode").css("display","none");
                                                     } else {
                                                         elem.innerHTML = "00:"+timeLeft;
                                                         timeLeft--;
                                                     }
                                                 }
                                             } else {
-                                                $("#err-system").html("");
+                                                // $("#err-system").html("");
                                                 toastr.error( response.message );
                                             }
                                         },
                                         error: function( err ) {
                                             console.log(err);
-                                            $("#err-system").html("");
+                                            // $("#err-system").html("");
                                         },
                                         complete : function() {
-                                            $("#err-system").html("");
+                                            // $("#err-system").html("");
                                             $(".place-loader").removeClass("loadingSpinner");
                                             $(".btnSubmit").removeClass("d-flex justify-content-center gap-3");
                                         },
                                     });
                                 },
                                 error: function(err) {
-                                    $("#err-system").html("");
+                                    // $("#err-system").html("");
                                     const objectField = Object.keys(err.responseJSON.errors)[0];
                                     const valueObjectField = err.responseJSON.errors[objectField][0];
                                     toastr.error( valueObjectField );
@@ -323,11 +340,12 @@
                 var name = $('#name').val();
                 var handphone = $('#handphone').val();
                 var password = $('#userpassword').val();
+                var pdm_id = $('#pdm_id').val();
 
                 $.ajax({
                     type: "POST",
                     url: '/register',
-                    data: {"_token": "{{ csrf_token() }}", name:name, handphone:handphone, password:password, password_confirmation: confirm, email: '', otp:kode},
+                    data: {"_token": "{{ csrf_token() }}", pdm_id:pdm_id, name:name, handphone:handphone, password:password, password_confirmation: confirm, email: '', otp:kode},
                     beforeSend : function(xhr, opts){
                             $("#err-system").html("Validate WA Number is Progress");
                             $(".place-loader").addClass("loadingSpinner");

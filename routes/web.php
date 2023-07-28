@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/login');
-});
+Route::get('/', [App\Http\Controllers\WebController::class, 'index']);
+Route::get('/paket/lazismu-kota-malang/{url}', [App\Http\Controllers\WebController::class, 'detail']);
+Route::post('/order', [App\Http\Controllers\WebController::class, 'order']);
+Route::get('/order-success/{enc}', [App\Http\Controllers\WebController::class, 'success']);
+
 Route::post('/register-validate', [App\Http\Controllers\UsersController::class, 'registerValidate']);
 Route::get('/validate-wa-number/{wa}', [App\Http\Controllers\UsersController::class, 'numberWAValidate']);
 Route::get('/send-otp/{wa}', [App\Http\Controllers\UsersController::class, 'sendOTP']);
@@ -37,6 +39,16 @@ Route::post('/petugas/post', [App\Http\Controllers\UsersController::class, 'post
 Route::get('/petugas/ubah/{id}', [App\Http\Controllers\UsersController::class, 'ubah']);
 Route::post('/petugas/put', [App\Http\Controllers\UsersController::class, 'put']);
 Route::post('/petugas/hapus', [App\Http\Controllers\UsersController::class, 'hapus']);
+
+Route::get('/qurban', [App\Http\Controllers\TransactionController::class, 'index']);
+Route::post('/qurban', [App\Http\Controllers\TransactionController::class, 'index']);
+Route::get('/qurban/tambah', [App\Http\Controllers\TransactionController::class, 'tambah']);
+Route::post('/qurban/post', [App\Http\Controllers\TransactionController::class, 'post']);
+Route::get('/qurban/ubah/{id}', [App\Http\Controllers\TransactionController::class, 'ubah']);
+Route::get('/qurban/detail/{id}', [App\Http\Controllers\TransactionController::class, 'detail']);
+Route::post('/qurban/put', [App\Http\Controllers\TransactionController::class, 'put']);
+Route::post('/qurban/hapus', [App\Http\Controllers\TransactionController::class, 'hapus']);
+Route::post('/qurban/confirm', [App\Http\Controllers\TransactionController::class, 'confirm']);
 
 
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);

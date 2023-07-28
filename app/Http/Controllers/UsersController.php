@@ -24,8 +24,10 @@ class UsersController extends Controller
             'name' => ['required'],
             'handphone' => ['required', 'unique:users'],
             'password' => ['required', 'min:8', 'confirmed'],
+            'pdm_id' => ['required'],
         ], [
             'name.required' => 'Silahkan mengisi nama lengkap.',
+            'pdm_id.required' => 'Silahkan mengisi wilayah.',
             'handphone.required' => 'Silahkan mengisi nomor WA.',
             'handphone.unique' => 'Nomor handphone sudah terdaftar.',
             'password.required' => 'Silahkan mengisi password.',
@@ -57,7 +59,7 @@ class UsersController extends Controller
         session()->put('otp_code', $FourDigitRandomNumber);
         session()->put('otp_code_time', strtotime(date("Y-m-d H:i:s")));
         // send otp
-        $sender_wa = SenderWA::send_wa($wa, $FourDigitRandomNumber);
+        $sender_wa = SenderWA::send_otp($wa, $FourDigitRandomNumber);
         return $sender_wa;
 
     }
@@ -80,7 +82,13 @@ public function index(Request $request)
     }
 
     public function tambah(){
-        return view('staf.tambah');
+        $wilayah_pdm = DB::table('pdm')->get();
+
+        $data = [
+            'wilayah' => $wilayah_pdm
+        ];
+
+        return view('staf.tambah')->with($data);
     }
 
     public function post(Request $request) {
@@ -88,11 +96,13 @@ public function index(Request $request)
             'name' => 'required',
             'handphone' => 'required|unique:users',
             'password' => 'required',
+            'pdm_id' => 'required',
         ]);
 
         $insert = DB::table('users')->insertGetId([
             'name' => $request->name,
             'handphone' => $request->handphone,
+            'pdm_id' => $request->pdm_id,
             'password' => Hash::make($request->password),
             'created_at' => date('Y-m-d H:i:s'),
         ]);
@@ -112,8 +122,10 @@ public function index(Request $request)
 
     public function ubah($id){
         $getData = DB::table('users')->where('id', $id)->first();
+        $wilayah_pdm = DB::table('pdm')->get();
         $data = [
-            'data' => $getData
+            'data' => $getData,
+            'wilayah' => $wilayah_pdm,
         ];
 
         return view('staf.ubah')->with($data);
@@ -122,11 +134,13 @@ public function index(Request $request)
     public function put(Request $request) {
         $this->validate($request, [
             'name' => 'required',
+            'pdm_id' => 'required',
             'handphone' => ['required', \Illuminate\Validation\Rule::unique('users')->ignore($request->id)],
         ]);
 
         $updateArray = [
             'name' => $request->name,
+            'pdm_id' => $request->pdm_id,
             'handphone' => $request->handphone,
             'updated_at' => date('Y-m-d H:i:s'),
         ];
